@@ -10,7 +10,10 @@ public class StartManager : MonoBehaviour {
     float width = 0;
     public GameObject ball;
     public GameObject bottomWall;
+    public GameObject grass;
     bool isatMenu= true;
+
+    Animator a;
 
     // Use this for initialization
     void Start () {
@@ -26,13 +29,9 @@ public class StartManager : MonoBehaviour {
         bottomWall.transform.localScale = new Vector3(width, 0.5F, 0);
         bottomWall.transform.position = new Vector3(0, (-height / 2) -5, 0);
 
-
+        grass.transform.position = new Vector3(0, (-height / 2) + 0.75f, 0);
+        DontDestroyOnLoad(grass);
     }
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 
     IEnumerator SpawnBalls()
     {
@@ -47,6 +46,15 @@ public class StartManager : MonoBehaviour {
     public void StartGame()
     {
         Debug.Log("Starting Game");
-        UnityEngine.SceneManagement.SceneManager.LoadScene("Game");
+        //UnityEngine.SceneManagement.SceneManager.LoadScene("Game");
+        Color col = new Color(0.5f, 0.7f, 0.8f,1);
+        //col = Color.cyan;
+        Debug.Log(col.ToString());
+        Initiate.Fade("Game", col, 2);
+    }
+
+    public void OnDestroy()
+    {
+        Debug.Log("START MANAGER DESTROYED");
     }
 }

@@ -80,8 +80,15 @@
     <Compile Include="Assets\Scripts\CloudMangager.cs" />
     <Compile Include="Assets\Scripts\CloudMovement.cs" />
     <Compile Include="Assets\Scripts\GM.cs" />
+    <Compile Include="Assets\Scripts\MusicPlayer.cs" />
     <Compile Include="Assets\Scripts\StartManager.cs" />
+    <Compile Include="Assets\Scripts\StartWordsController.cs" />
     <Compile Include="Assets\Scripts\Util.cs" />
+    <Compile Include="Assets\Simple Scene Fade Load System\Scripts\Fader.cs" />
+    <Compile Include="Assets\Simple Scene Fade Load System\Scripts\Initiate.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\Simple Scene Fade Load System\ReadMeFirst.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />

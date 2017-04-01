@@ -45,12 +45,14 @@ public class CloudMangager : MonoBehaviour {
 
     IEnumerator CloudSpawn(float x, float y)
     {
+        float yRange1 = y *0.4f;
+        float yRange2 = y *0.75f;
         while (isPlaying)
         {
             Debug.Log("Spawning Cloud");
             int time = Random.Range(5, 10);
             int cloudNumber = Random.Range(0, 4);
-            float yPos = Random.Range(-x / 2, x / 2);
+            float yPos = Random.Range(-yRange1, yRange2);
 
             Instantiate(clouds[cloudNumber], new Vector3(-5f, yPos, 1), Quaternion.EulerAngles(0, 0, 0));
             yield return new WaitForSeconds(time);

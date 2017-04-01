@@ -13,7 +13,8 @@ public class CloudMovement : MonoBehaviour {
         speedv = new Vector3(speed, 0, 0);
         float scale = Random.Range(1f, 1.5f);
         transform.localScale = new Vector3(scale, scale, 0);
-
+        
+        DontDestroyOnLoad(this.gameObject);
     }
 	
 	// Update is called once per frame

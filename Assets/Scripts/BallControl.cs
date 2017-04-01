@@ -10,8 +10,9 @@ public class BallControl : MonoBehaviour {
 
     GM gm;
     public GameObject _gm;
+    public GameObject b;
 
-	void Start () {
+    void Start () {
 
         if (SceneManager.GetActiveScene().name == "Game")
         {
@@ -19,9 +20,13 @@ public class BallControl : MonoBehaviour {
         }
 
         rb = GetComponent<Rigidbody2D>();
-        rb.AddForce(new Vector2(5, 5));
+        //rb.AddForce(new Vector2(5, 5));
         _gm = GameObject.Find("GameManager");
-        gm = _gm.GetComponent<GM>();
+        b = GameObject.Find("bottomWall");
+        if (SceneManager.GetActiveScene().name == "Game")
+        {
+            gm = _gm.GetComponent<GM>();
+        }
     }
 	
 	// Update is called once per frame
@@ -43,10 +48,10 @@ public class BallControl : MonoBehaviour {
                 Vector3 pos = Camera.main.ScreenToWorldPoint(t.position);
                 //Debug.Log("Touched at:  " + pos);
 
-                if (t.phase == TouchPhase.Began) {
+                if (t.phase == TouchPhase.Began&& gm.isPlaying) {
 
                 RaycastHit2D hit = Physics2D.Raycast(pos, Vector2.zero);
-                    if (hit.collider != null)
+                    if (hit.collider.name == gameObject.name)
                     {
                         //Debug.Log("Raycast hit " + hit.collider.name);
                         if (hit.collider.name == gameObject.name)
@@ -66,8 +71,13 @@ public class BallControl : MonoBehaviour {
     }
 }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    void OnCollisionEnter2D(Collision2D coll)
     {
-        Debug.Log("BALL HIT BOTTOM TRIGGER");
+        Debug.Log("BALL HIT SOMETHING");
+        if (coll.gameObject == b)
+        {
+            gm.EndGame();
+        }
+        //gm.SpawnBall();
     }
 }
