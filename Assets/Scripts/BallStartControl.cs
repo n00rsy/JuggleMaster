@@ -21,7 +21,7 @@ public class BallStartControl : MonoBehaviour {
         int y = Random.Range(20, 30);
 
         rb.AddForce(new Vector2(x, y));
-
+        DontDestroyOnLoad(this.gameObject);
     }
 	
 	// Update is called once per frame

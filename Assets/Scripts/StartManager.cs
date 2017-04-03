@@ -11,9 +11,12 @@ public class StartManager : MonoBehaviour {
     public GameObject ball;
     public GameObject bottomWall;
     public GameObject grass;
+    public GameObject master;
+    public GameObject juggle;
+    public GameObject button;
     bool isatMenu= true;
 
-    Animator a;
+    Animator masterAnimator, juggleAnimator, buttonAnimator;
 
     // Use this for initialization
     void Start () {
@@ -29,8 +32,21 @@ public class StartManager : MonoBehaviour {
         bottomWall.transform.localScale = new Vector3(width, 0.5F, 0);
         bottomWall.transform.position = new Vector3(0, (-height / 2) -5, 0);
 
-        grass.transform.position = new Vector3(0, (-height / 2) + 0.75f, 0);
+        grass.transform.position = new Vector3(0, (-height / 2) + 0.75f, -2);
         DontDestroyOnLoad(grass);
+
+        //a = master.GetComponent<Animator>();
+        //int moveHash = Animator.StringToHash("JuggleMove");
+        //a.Play(moveHash);
+        masterAnimator = master.GetComponent<Animator>();
+        juggleAnimator = juggle.GetComponent<Animator>();
+        buttonAnimator = button.GetComponent<Animator>();
+        //buttonAnimator.SetFloat("FlySpeed", 1);
+        //buttonAnimator.SetFloat("FlySpeed", 0);
+        //buttonAnimator.SetTrigger("FlyIn");
+
+        //a.Play();
+
     }
 
     IEnumerator SpawnBalls()
@@ -45,16 +61,33 @@ public class StartManager : MonoBehaviour {
 
     public void StartGame()
     {
+        StartCoroutine("startGame");
+    }
+
+    private IEnumerator startGame()
+    {
+        Destroy(bottomWall);
+        isatMenu = false;
+
+        masterAnimator.SetFloat("Speed", -1);
+        juggleAnimator.SetFloat("Speed", -1);
+        buttonAnimator.SetFloat("FlySpeed", 1);
+
+        yield return new WaitForSeconds(4);
         Debug.Log("Starting Game");
         //UnityEngine.SceneManagement.SceneManager.LoadScene("Game");
-        Color col = new Color(0.5f, 0.7f, 0.8f,1);
+        Color col = new Color(0.5f, 0.7f, 0.8f, 1);
         //col = Color.cyan;
         Debug.Log(col.ToString());
-        Initiate.Fade("Game", col, 2);
+        //Initiate.Fade("Game", col, 2);
+        SceneManager.LoadScene("Game");
     }
 
     public void OnDestroy()
     {
+        //int moveHash = Animator.StringToHash("JuggleMove");
         Debug.Log("START MANAGER DESTROYED");
+        //a.Play(moveHash);
+        //a.Rebind();
     }
 }
