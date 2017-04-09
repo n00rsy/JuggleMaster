@@ -12,6 +12,7 @@ public class StartManager : MonoBehaviour {
     bool isatMenu= true;
 
     public AudioClip whoosh;
+    public AudioClip[] ballSounds;
     Animator masterAnimator, juggleAnimator, buttonAnimator;
 
     public List<GameObject> ballList;
@@ -26,7 +27,7 @@ public class StartManager : MonoBehaviour {
 
         StartCoroutine("SpawnBalls");
 
-        BoxCollider2D bottom = (BoxCollider2D)bottomWall.gameObject.AddComponent(typeof(BoxCollider2D));
+
         bottomWall.transform.localScale = new Vector3(width, 0.5F, 0);
         bottomWall.transform.position = new Vector3(0, (-height / 2) -5, 0);
 
@@ -36,6 +37,9 @@ public class StartManager : MonoBehaviour {
         masterAnimator = master.GetComponent<Animator>();
         juggleAnimator = juggle.GetComponent<Animator>();
         buttonAnimator = button.GetComponent<Animator>();
+
+        CloudMangager cm = GetComponent<CloudMangager>();
+        cm.SpawnFirstCloud();
 
     }
 
@@ -56,6 +60,8 @@ public class StartManager : MonoBehaviour {
                 float x = Random.Range(-width / 2, width / 2);
                 GameObject b = Instantiate(ball, new Vector3(x, (-height / 2) - 1, 0), Quaternion.Euler(0, 0, 0));
                 ballList.Add(b);
+                int a = Random.Range(0, 5);
+                AudioSource.PlayClipAtPoint(ballSounds[a], Vector3.zero);
             }
         }
     }

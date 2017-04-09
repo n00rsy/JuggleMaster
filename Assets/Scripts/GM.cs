@@ -94,7 +94,7 @@ public class GM : MonoBehaviour {
 
     public void PlayRandomSound()
     {
-        int a = Random.Range(0, 4);
+        int a = Random.Range(0, 5);
         AudioSource.PlayClipAtPoint(ballSounds[a], Vector3.zero);
     }
 
@@ -107,9 +107,7 @@ public class GM : MonoBehaviour {
         numberofBalls++;
         if (numberofBalls ==2)
         {
-            Debug.Log("fuck yes mother bitches");
-            //GameObject b1 = GameObject.Find("Ball");
-            //GameObject b2 = GameObject.Find("Ball(Clone)");
+            
             GameObject[] balls = GameObject.FindGameObjectsWithTag("Balls");
             Physics2D.IgnoreCollision(balls[0].GetComponent<Collider2D>(), balls[1].GetComponent<Collider2D>());
             
@@ -149,7 +147,10 @@ public class GM : MonoBehaviour {
         foreach (GameObject g in ballList)
         {
             BallControl b = g.GetComponent<BallControl>();
-            b.dieAnimation();
+            if (b != null)
+            {
+                b.dieAnimation();
+            }
 
         }
 

@@ -9,9 +9,9 @@ public class CloudMovement : MonoBehaviour {
 
 	void Start () {
         speed = Random.Range(0.004f, 0.01f);
-        speed = speed / 2;
+        speed = speed / 3;
         speedv = new Vector3(speed, 0, 0);
-        float scale = Random.Range(1f, 1.5f);
+        float scale = Random.Range(1.5f, 2);
         transform.localScale = new Vector3(scale, scale, 0);
         
         DontDestroyOnLoad(this.gameObject);

@@ -33,7 +33,7 @@ public class CloudMangager : MonoBehaviour {
             coroutine = CloudSpawn(d[0], d[1]);
             StartCoroutine(coroutine);
         }
-        SpawnFirstCloud();
+        //SpawnFirstCloud();
         //StartCoroutine("CloudSpawn", gm.height, gm.width);
 
     }
@@ -45,12 +45,13 @@ public class CloudMangager : MonoBehaviour {
 
     IEnumerator CloudSpawn(float x, float y)
     {
-        float yRange1 = y *0.4f;
-        float yRange2 = y *0.75f;
+        float yRange1 = y *0.6f;
+        float yRange2 = y *0.8f;
+        Debug.Log("Y RANGE 1: " + yRange1 + " Y RANGE 2: " + yRange2);
         while (isPlaying)
         {
             Debug.Log("Spawning Cloud");
-            int time = Random.Range(5, 10);
+            float time = Random.Range(25, 35);
             int cloudNumber = Random.Range(0, 4);
             float yPos = Random.Range(-yRange1, yRange2);
 
@@ -60,12 +61,12 @@ public class CloudMangager : MonoBehaviour {
 
     }
 
-    void SpawnFirstCloud()
+    public void SpawnFirstCloud()
     {
         Debug.Log("Spawning First Cloud");
         int cloudNumber = Random.Range(0, 4);
         float yPos = 0;
 
-        Instantiate(clouds[cloudNumber], new Vector3(-2, yPos, 1), Quaternion.Euler(0, 0, 0));
+        Instantiate(clouds[cloudNumber], Vector3.zero, Quaternion.Euler(0, 0, 0));
     }
 }
