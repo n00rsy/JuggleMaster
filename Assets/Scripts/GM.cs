@@ -1,18 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GM : MonoBehaviour {
 
-    public GameObject bottomWall;
-    public GameObject rightWall;
-    public GameObject leftWall;
-    public GameObject ball;
+    public GameObject bottomWall, rightWall, leftWall, ball,menu;
+
     public float height = 0;
     public float width = 0;
 
-    public Text scoreText; 
+    public Text scoreText;
+    public Text finalScoreText;
+    public Text highScoreText;
 
     public int score = 0;
     public int numberofBalls = 0;
@@ -23,7 +24,11 @@ public class GM : MonoBehaviour {
 
     public bool isPlaying;
 
+    public List<GameObject> ballList;
+
     Vector3 spawnPoint;
+
+    Animator menuAnimator;
 
     // Use this for initialization
     void Start () {
@@ -61,13 +66,20 @@ public class GM : MonoBehaviour {
 
         AudioSource.PlayClipAtPoint(startSound, Vector3.zero);
 
+        menuAnimator = menu.GetComponent<Animator>();
+
         isPlaying = true;
     }
 	
 	// Update is called once per frame
 	void Update () {
-     
-	}
+        if (Input.GetKey(KeyCode.Escape))
+        {
+            SceneManager.LoadScene("Start");
+
+        }
+
+    }
 
     public void SetScore()
     {
@@ -89,8 +101,9 @@ public class GM : MonoBehaviour {
     public void SpawnBall()
     {
         Debug.Log("Spawning new Ball");
-        GameObject b = Instantiate(ball, spawnPoint, Quaternion.EulerAngles(0, 0, 0));
+        GameObject b = Instantiate(ball, spawnPoint, Quaternion.Euler(0, 0, 0));
         b.name = "Ball" + numberofBalls;
+        ballList.Add(b);
         numberofBalls++;
         if (numberofBalls ==2)
         {
@@ -106,11 +119,41 @@ public class GM : MonoBehaviour {
 
     public void EndGame()
     {
-        if (!isPlaying)
+        if (isPlaying)
         {
+            finalScoreText.text = ("SCORE: " + score);
+
+            if (score > PlayerPrefs.GetInt("HighScore"))
+            {
+                PlayerPrefs.SetInt("HighScore", score);
+            }
+            highScoreText.text = ("HIGHSCORE: " + PlayerPrefs.GetInt("HighScore"));
+
+            Debug.Log("Playing end game sound");
             AudioSource.PlayClipAtPoint(endSound, Vector3.zero);
+            menuAnimator.SetFloat("FlySpeed", 1);
         }
         isPlaying = false;
     }
 
+    public void RestartGame()
+    {
+       
+        StartCoroutine("Restart");
+        
+    }
+    IEnumerator Restart()
+    {
+        menuAnimator.SetFloat("FlySpeed", -1);
+
+        foreach (GameObject g in ballList)
+        {
+            BallControl b = g.GetComponent<BallControl>();
+            b.dieAnimation();
+
+        }
+
+        yield return new WaitForSeconds(3.5f);
+        SceneManager.LoadScene("Game");
+    }
 }

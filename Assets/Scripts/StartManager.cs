@@ -8,15 +8,13 @@ public class StartManager : MonoBehaviour {
 
     float height = 0;
     float width = 0;
-    public GameObject ball;
-    public GameObject bottomWall;
-    public GameObject grass;
-    public GameObject master;
-    public GameObject juggle;
-    public GameObject button;
+    public GameObject ball, bottomWall, grass, master, juggle, button;
     bool isatMenu= true;
 
+    public AudioClip whoosh;
     Animator masterAnimator, juggleAnimator, buttonAnimator;
+
+    public List<GameObject> ballList;
 
     // Use this for initialization
     void Start () {
@@ -35,27 +33,30 @@ public class StartManager : MonoBehaviour {
         grass.transform.position = new Vector3(0, (-height / 2) + 0.75f, -2);
         DontDestroyOnLoad(grass);
 
-        //a = master.GetComponent<Animator>();
-        //int moveHash = Animator.StringToHash("JuggleMove");
-        //a.Play(moveHash);
         masterAnimator = master.GetComponent<Animator>();
         juggleAnimator = juggle.GetComponent<Animator>();
         buttonAnimator = button.GetComponent<Animator>();
-        //buttonAnimator.SetFloat("FlySpeed", 1);
-        //buttonAnimator.SetFloat("FlySpeed", 0);
-        //buttonAnimator.SetTrigger("FlyIn");
-
-        //a.Play();
 
     }
+
+    void Update() {
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+            Application.Quit();
+    }
+}
 
     IEnumerator SpawnBalls()
     {
         while (isatMenu)
         {
             yield return new WaitForSeconds(2);
-            float x = Random.Range(-width / 2, width / 2);
-            Instantiate(ball, new Vector3(x, (-height / 2) - 1, 0), Quaternion.EulerAngles(0, 0, 0));
+            if (isatMenu)
+            {
+                float x = Random.Range(-width / 2, width / 2);
+                GameObject b = Instantiate(ball, new Vector3(x, (-height / 2) - 1, 0), Quaternion.Euler(0, 0, 0));
+                ballList.Add(b);
+            }
         }
     }
 
@@ -69,25 +70,23 @@ public class StartManager : MonoBehaviour {
         Destroy(bottomWall);
         isatMenu = false;
 
+        AudioSource.PlayClipAtPoint(whoosh, Vector3.zero);
         masterAnimator.SetFloat("Speed", -1);
         juggleAnimator.SetFloat("Speed", -1);
         buttonAnimator.SetFloat("FlySpeed", 1);
 
-        yield return new WaitForSeconds(4);
+        foreach(GameObject g in ballList)
+        {
+            BallStartControl b = g.GetComponent<BallStartControl>();
+            b.dieAnimation();
+
+        }
+
+        yield return new WaitForSeconds(2);
         Debug.Log("Starting Game");
-        //UnityEngine.SceneManagement.SceneManager.LoadScene("Game");
-        Color col = new Color(0.5f, 0.7f, 0.8f, 1);
-        //col = Color.cyan;
-        Debug.Log(col.ToString());
-        //Initiate.Fade("Game", col, 2);
         SceneManager.LoadScene("Game");
     }
 
-    public void OnDestroy()
-    {
-        //int moveHash = Animator.StringToHash("JuggleMove");
-        Debug.Log("START MANAGER DESTROYED");
-        //a.Play(moveHash);
-        //a.Rebind();
-    }
+
+    
 }

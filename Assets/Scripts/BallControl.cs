@@ -12,6 +12,10 @@ public class BallControl : MonoBehaviour {
     public GameObject _gm;
     public GameObject b;
 
+    public bool shrinking = false;
+    float targetScale = 0;
+    float shrinkSpeed = 8;
+
     void Start () {
 
         if (SceneManager.GetActiveScene().name == "Game")
@@ -69,7 +73,18 @@ public class BallControl : MonoBehaviour {
                 }
           }  
     }
-}
+        if (shrinking)
+        {
+            Debug.Log("shrinking ball");
+            transform.localScale -= Vector3.one * Time.deltaTime * shrinkSpeed;
+            if (transform.localScale.x < targetScale)
+            {
+                shrinking = false;
+                Destroy(this.gameObject);
+            }
+
+        }
+    }
 
     void OnCollisionEnter2D(Collision2D coll)
     {
@@ -79,5 +94,11 @@ public class BallControl : MonoBehaviour {
             gm.EndGame();
         }
         //gm.SpawnBall();
+    }
+
+    public void dieAnimation()
+    {
+        Debug.Log("Die Animation Started");
+        shrinking = true;
     }
 }

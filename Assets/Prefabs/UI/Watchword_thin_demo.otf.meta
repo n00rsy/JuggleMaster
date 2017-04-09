@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: 2f9bbfe83f999494a814a2a89c78f2a0
+timeCreated: 1491692915
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Watchword Thin Demo
+  fontNames:
+  - Watchword Thin Demo
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
