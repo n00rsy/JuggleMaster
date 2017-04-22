@@ -16,6 +16,8 @@ public class BallControl : MonoBehaviour {
     float targetScale = 0;
     float shrinkSpeed = 8;
 
+    //Collider c;
+
     void Start () {
 
         if (SceneManager.GetActiveScene().name == "Game")
@@ -31,6 +33,7 @@ public class BallControl : MonoBehaviour {
         {
             gm = _gm.GetComponent<GM>();
         }
+        //c = GetComponent<Collider>()
     }
 	
 	// Update is called once per frame
@@ -58,8 +61,7 @@ public class BallControl : MonoBehaviour {
                     if (hit.collider.name == gameObject.name)
                     {
                         //Debug.Log("Raycast hit " + hit.collider.name);
-                        if (hit.collider.name == gameObject.name)
-                        {
+                 
                             float xForce = pos.x - transform.position.x;
                             xForce = -xForce * 20;
                             //Debug.Log("Force in X Direction:  " + xForce);
@@ -68,7 +70,7 @@ public class BallControl : MonoBehaviour {
                             gm.SetScore();
                             Debug.Log("Score: " + gm.score);
                             gm.PlayRandomSound();
-                        }
+                        
                     }
                 }
           }  

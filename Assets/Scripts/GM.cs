@@ -14,13 +14,14 @@ public class GM : MonoBehaviour {
     public Text scoreText;
     public Text finalScoreText;
     public Text highScoreText;
+    public Text newBall;
 
     public int score = 0;
     public int numberofBalls = 0;
 
     public AudioClip[] ballSounds;
-    public AudioClip endSound;
-    public AudioClip startSound;
+    public AudioClip startSound, whoosh,endSound;
+    
 
     public bool isPlaying;
 
@@ -69,6 +70,7 @@ public class GM : MonoBehaviour {
         menuAnimator = menu.GetComponent<Animator>();
 
         isPlaying = true;
+        //StartCoroutine("SpawnBallText");
     }
 	
 	// Update is called once per frame
@@ -87,7 +89,8 @@ public class GM : MonoBehaviour {
         scoreText.text = score.ToString();
         if(score == 30)
         {
-            SpawnBall();
+            //SpawnBall();
+            StartCoroutine("SpawnBallText");
 
         }
     }
@@ -98,10 +101,27 @@ public class GM : MonoBehaviour {
         AudioSource.PlayClipAtPoint(ballSounds[a], Vector3.zero);
     }
 
+IEnumerator SpawnBallText()
+    {
+        string a = "NEW BALL IN ";
+        yield return new WaitForSeconds(3);
+        for (int i = 0; i < 3; i++)
+        {
+            Debug.Log("Flashing Text "+i);
+            newBall.text = a + (3-i);
+            newBall.color = new Color(1, 1, 1, 1);//white
+            yield return new WaitForSeconds(1);
+            newBall.color = new Color(0, 0, 0, 0);//transparent
+        }
+        newBall.color = new Color(0, 0, 0, 0);//transparent
+        SpawnBall();
+    }
+
     public void SpawnBall()
     {
         Debug.Log("Spawning new Ball");
         GameObject b = Instantiate(ball, spawnPoint, Quaternion.Euler(0, 0, 0));
+        AudioSource.PlayClipAtPoint(startSound, Vector3.zero);
         b.name = "Ball" + numberofBalls;
         ballList.Add(b);
         numberofBalls++;
@@ -129,6 +149,7 @@ public class GM : MonoBehaviour {
 
             Debug.Log("Playing end game sound");
             AudioSource.PlayClipAtPoint(endSound, Vector3.zero);
+            AudioSource.PlayClipAtPoint(whoosh, Vector3.zero);
             menuAnimator.SetFloat("FlySpeed", 1);
         }
         isPlaying = false;
@@ -143,7 +164,7 @@ public class GM : MonoBehaviour {
     IEnumerator Restart()
     {
         menuAnimator.SetFloat("FlySpeed", -1);
-
+        AudioSource.PlayClipAtPoint(whoosh, Vector3.zero);
         foreach (GameObject g in ballList)
         {
             BallControl b = g.GetComponent<BallControl>();

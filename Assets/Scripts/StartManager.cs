@@ -27,7 +27,6 @@ public class StartManager : MonoBehaviour {
 
         StartCoroutine("SpawnBalls");
 
-
         bottomWall.transform.localScale = new Vector3(width, 0.5F, 0);
         bottomWall.transform.position = new Vector3(0, (-height / 2) -5, 0);
 
@@ -37,6 +36,7 @@ public class StartManager : MonoBehaviour {
         masterAnimator = master.GetComponent<Animator>();
         juggleAnimator = juggle.GetComponent<Animator>();
         buttonAnimator = button.GetComponent<Animator>();
+
 
         CloudMangager cm = GetComponent<CloudMangager>();
         cm.SpawnFirstCloud();
