@@ -11,25 +11,21 @@ public class GM : MonoBehaviour {
     public float height = 0;
     public float width = 0;
 
-    public Text scoreText;
-    public Text finalScoreText;
-    public Text highScoreText;
-    public Text newBall;
+    public Text scoreText, finalScoreText, highScoreText, newBall;
 
     public int score = 0;
     public int numberofBalls = 0;
 
     public AudioClip[] ballSounds;
     public AudioClip startSound, whoosh,endSound;
-    
 
     public bool isPlaying;
 
     public List<GameObject> ballList;
 
     Vector3 spawnPoint;
-
     Animator menuAnimator;
+    float volume = 0.9f;
 
     // Use this for initialization
     void Start () {
@@ -65,7 +61,7 @@ public class GM : MonoBehaviour {
         SetScore();
         SpawnBall();
 
-        AudioSource.PlayClipAtPoint(startSound, Vector3.zero);
+        AudioSource.PlayClipAtPoint(startSound, Vector3.zero, volume);
 
         menuAnimator = menu.GetComponent<Animator>();
 
@@ -77,7 +73,7 @@ public class GM : MonoBehaviour {
 	void Update () {
         if (Input.GetKey(KeyCode.Escape))
         {
-            SceneManager.LoadScene("Start");
+            Initiate.Fade("Start", Color.white, 0.7f);
 
         }
 
@@ -87,9 +83,13 @@ public class GM : MonoBehaviour {
     {
         Debug.Log("Setting Score...");
         scoreText.text = score.ToString();
-        if(score == 30)
+        if(score == 15)
         {
-            //SpawnBall();
+            StartCoroutine("SpawnBallText");
+
+        }
+        if (score == 30)
+        {
             StartCoroutine("SpawnBallText");
 
         }
@@ -104,7 +104,6 @@ public class GM : MonoBehaviour {
 IEnumerator SpawnBallText()
     {
         string a = "NEW BALL IN ";
-        yield return new WaitForSeconds(3);
         for (int i = 0; i < 3; i++)
         {
             Debug.Log("Flashing Text "+i);
@@ -121,7 +120,7 @@ IEnumerator SpawnBallText()
     {
         Debug.Log("Spawning new Ball");
         GameObject b = Instantiate(ball, spawnPoint, Quaternion.Euler(0, 0, 0));
-        AudioSource.PlayClipAtPoint(startSound, Vector3.zero);
+        AudioSource.PlayClipAtPoint(startSound, Vector3.zero, volume);
         b.name = "Ball" + numberofBalls;
         ballList.Add(b);
         numberofBalls++;
@@ -132,6 +131,13 @@ IEnumerator SpawnBallText()
             Physics2D.IgnoreCollision(balls[0].GetComponent<Collider2D>(), balls[1].GetComponent<Collider2D>());
             
             //Physics2D.IgnoreCollision(b1.GetComponent<Collider2D>(), b2.GetComponent<Collider2D>());
+        }
+        if (numberofBalls == 3)
+        {
+            GameObject[] balls = GameObject.FindGameObjectsWithTag("Balls");
+            Physics2D.IgnoreCollision(balls[0].GetComponent<Collider2D>(), balls[2].GetComponent<Collider2D>());
+            Physics2D.IgnoreCollision(balls[1].GetComponent<Collider2D>(), balls[2].GetComponent<Collider2D>());
+
         }
     }
 
@@ -148,7 +154,7 @@ IEnumerator SpawnBallText()
             highScoreText.text = ("HIGHSCORE: " + PlayerPrefs.GetInt("HighScore"));
 
             Debug.Log("Playing end game sound");
-            AudioSource.PlayClipAtPoint(endSound, Vector3.zero);
+            AudioSource.PlayClipAtPoint(endSound, Vector3.zero, volume);
             AudioSource.PlayClipAtPoint(whoosh, Vector3.zero);
             menuAnimator.SetFloat("FlySpeed", 1);
         }
@@ -178,4 +184,5 @@ IEnumerator SpawnBallText()
         yield return new WaitForSeconds(3.5f);
         SceneManager.LoadScene("Game");
     }
+
 }

@@ -55,7 +55,7 @@ public class CloudMangager : MonoBehaviour {
             int cloudNumber = Random.Range(0, 4);
             float yPos = Random.Range(-yRange1, yRange2);
 
-            Instantiate(clouds[cloudNumber], new Vector3(-5f, yPos, 1), Quaternion.Euler(0, 0, 0));
+            Instantiate(clouds[cloudNumber], new Vector3(-5f, yPos, 8), Quaternion.Euler(0, 0, 0));
             yield return new WaitForSeconds(time);
         }
 
@@ -65,8 +65,8 @@ public class CloudMangager : MonoBehaviour {
     {
         Debug.Log("Spawning First Cloud");
         int cloudNumber = Random.Range(0, 4);
-        float yPos = 0;
+        //float yPos = 0;
 
-        Instantiate(clouds[cloudNumber], Vector3.zero, Quaternion.Euler(0, 0, 0));
+        Instantiate(clouds[cloudNumber], new Vector3(0,0,8), Quaternion.Euler(0, 0, 0));
     }
 }

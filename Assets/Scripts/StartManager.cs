@@ -93,6 +93,10 @@ public class StartManager : MonoBehaviour {
         SceneManager.LoadScene("Game");
     }
 
-
+    public void GoToAboutPage()
+    {
+        Debug.Log("About button pressed");
+        Initiate.Fade("About", Color.white, 0.7f);
+    }
     
 }
