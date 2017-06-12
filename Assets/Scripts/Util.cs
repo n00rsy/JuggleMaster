@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public static class Util  {
-   
+
+    public static Vector3 CameraLocation = new Vector3(0, 0, -10);
+
     public static float[] getScreenDimentions()
     {
         float height;

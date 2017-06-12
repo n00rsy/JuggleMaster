@@ -37,6 +37,7 @@ public class StartManager : MonoBehaviour {
         juggleAnimator = juggle.GetComponent<Animator>();
         buttonAnimator = button.GetComponent<Animator>();
 
+        PlayerPrefs.SetInt("ADCounter", 0);
 
         CloudMangager cm = GetComponent<CloudMangager>();
         cm.SpawnFirstCloud();
@@ -61,7 +62,7 @@ public class StartManager : MonoBehaviour {
                 GameObject b = Instantiate(ball, new Vector3(x, (-height / 2) - 1, 0), Quaternion.Euler(0, 0, 0));
                 ballList.Add(b);
                 int a = Random.Range(0, 5);
-                AudioSource.PlayClipAtPoint(ballSounds[a], Vector3.zero);
+                AudioSource.PlayClipAtPoint(ballSounds[a], Util.CameraLocation);
             }
         }
     }
@@ -76,12 +77,13 @@ public class StartManager : MonoBehaviour {
         Destroy(bottomWall);
         isatMenu = false;
 
-        AudioSource.PlayClipAtPoint(whoosh, Vector3.zero);
         masterAnimator.SetFloat("Speed", -1);
         juggleAnimator.SetFloat("Speed", -1);
         buttonAnimator.SetFloat("FlySpeed", 1);
 
-        foreach(GameObject g in ballList)
+        AudioSource.PlayClipAtPoint(whoosh, Util.CameraLocation);
+
+        foreach (GameObject g in ballList)
         {
             BallStartControl b = g.GetComponent<BallStartControl>();
             b.dieAnimation();
@@ -96,7 +98,7 @@ public class StartManager : MonoBehaviour {
     public void GoToAboutPage()
     {
         Debug.Log("About button pressed");
-        Initiate.Fade("About", Color.white, 0.7f);
+        Initiate.Fade("About", Color.white, 2);
     }
     
 }

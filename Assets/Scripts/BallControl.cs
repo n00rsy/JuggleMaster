@@ -26,9 +26,11 @@ public class BallControl : MonoBehaviour {
         }
 
         rb = GetComponent<Rigidbody2D>();
+        
         //rb.AddForce(new Vector2(5, 5));
         _gm = GameObject.Find("GameManager");
         b = GameObject.Find("bottomWall");
+
         if (SceneManager.GetActiveScene().name == "Game")
         {
             gm = _gm.GetComponent<GM>();
@@ -63,9 +65,18 @@ public class BallControl : MonoBehaviour {
                         //Debug.Log("Raycast hit " + hit.collider.name);
                  
                             float xForce = pos.x - transform.position.x;
-                            xForce = -xForce * 20;
-                            //Debug.Log("Force in X Direction:  " + xForce);
-                            rb.AddForce(new Vector2(xForce, 28));
+                            xForce = -xForce * 30;
+                        //Debug.Log("Force in X Direction:  " + xForce);
+                            float yForce = rb.velocity.y;
+                        if (yForce < 0)
+                        {
+                            yForce = Mathf.Abs(yForce) + 30;
+                        }
+                        else
+                        {
+                            yForce = 30;
+                        }
+                            rb.AddForce(new Vector2(xForce, yForce));
                             gm.score++;
                             gm.SetScore();
                             Debug.Log("Score: " + gm.score);
@@ -94,6 +105,7 @@ public class BallControl : MonoBehaviour {
         if (coll.gameObject == b)
         {
             gm.EndGame();
+            
         }
         //gm.SpawnBall();
     }

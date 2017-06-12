@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.Advertisements;
 
 public class GM : MonoBehaviour {
 
@@ -26,6 +27,7 @@ public class GM : MonoBehaviour {
     Vector3 spawnPoint;
     Animator menuAnimator;
     float volume = 0.9f;
+    int adCounter = 0;
 
     // Use this for initialization
     void Start () {
@@ -61,7 +63,7 @@ public class GM : MonoBehaviour {
         SetScore();
         SpawnBall();
 
-        AudioSource.PlayClipAtPoint(startSound, Vector3.zero, volume);
+        AudioSource.PlayClipAtPoint(startSound, Util.CameraLocation, volume);
 
         menuAnimator = menu.GetComponent<Animator>();
 
@@ -73,7 +75,9 @@ public class GM : MonoBehaviour {
 	void Update () {
         if (Input.GetKey(KeyCode.Escape))
         {
-            Initiate.Fade("Start", Color.white, 0.7f);
+            if (!isPlaying) {
+                Initiate.Fade("Start", Color.white, 1);
+            }
 
         }
 
@@ -98,7 +102,7 @@ public class GM : MonoBehaviour {
     public void PlayRandomSound()
     {
         int a = Random.Range(0, 5);
-        AudioSource.PlayClipAtPoint(ballSounds[a], Vector3.zero);
+        AudioSource.PlayClipAtPoint(ballSounds[a], Util.CameraLocation);
     }
 
 IEnumerator SpawnBallText()
@@ -113,14 +117,17 @@ IEnumerator SpawnBallText()
             newBall.color = new Color(0, 0, 0, 0);//transparent
         }
         newBall.color = new Color(0, 0, 0, 0);//transparent
-        SpawnBall();
+        if (isPlaying)
+        {
+            SpawnBall();
+        }
     }
 
     public void SpawnBall()
     {
         Debug.Log("Spawning new Ball");
         GameObject b = Instantiate(ball, spawnPoint, Quaternion.Euler(0, 0, 0));
-        AudioSource.PlayClipAtPoint(startSound, Vector3.zero, volume);
+        AudioSource.PlayClipAtPoint(startSound, Util.CameraLocation, volume);
         b.name = "Ball" + numberofBalls;
         ballList.Add(b);
         numberofBalls++;
@@ -154,11 +161,38 @@ IEnumerator SpawnBallText()
             highScoreText.text = ("HIGHSCORE: " + PlayerPrefs.GetInt("HighScore"));
 
             Debug.Log("Playing end game sound");
-            AudioSource.PlayClipAtPoint(endSound, Vector3.zero, volume);
-            AudioSource.PlayClipAtPoint(whoosh, Vector3.zero);
+            AudioSource.PlayClipAtPoint(endSound, Util.CameraLocation, volume);
+            AudioSource.PlayClipAtPoint(whoosh, Util.CameraLocation);
             menuAnimator.SetFloat("FlySpeed", 1);
+
+            adCounter = PlayerPrefs.GetInt("ADCounter");
+            Debug.Log("ADCOUNTER:  "+ adCounter);
+            adCounter += 1;
+            PlayerPrefs.SetInt("ADCounter", adCounter);
+            if (adCounter == 4)
+            {
+                ShowDefaultAd();
+            }
         }
         isPlaying = false;
+    }
+
+    public void ShowDefaultAd()
+    {
+        Debug.Log("Attempting to show ad");
+#if UNITY_ADS
+        if (Advertisement.IsReady())
+        {
+            Advertisement.Show();
+            PlayerPrefs.SetInt("ADCounter", 0);
+        }
+        else
+        {
+            PlayerPrefs.SetInt("ADCounter", 9); //ad didnt show, line before it adds 1, so it equals 10 and attempts again
+            Debug.Log("Ads not ready for default placement");
+        }
+
+#endif
     }
 
     public void RestartGame()
@@ -170,7 +204,7 @@ IEnumerator SpawnBallText()
     IEnumerator Restart()
     {
         menuAnimator.SetFloat("FlySpeed", -1);
-        AudioSource.PlayClipAtPoint(whoosh, Vector3.zero);
+        AudioSource.PlayClipAtPoint(whoosh, Util.CameraLocation);
         foreach (GameObject g in ballList)
         {
             BallControl b = g.GetComponent<BallControl>();

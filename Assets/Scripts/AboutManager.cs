@@ -13,7 +13,7 @@ public class AboutManager : MonoBehaviour {
 	void Update () {
         if (Input.GetKey(KeyCode.Escape))
         {
-            Initiate.Fade("Start", Color.white, 0.7f);
+            Initiate.Fade("Start", Color.white, 1);
         }
     }
 
